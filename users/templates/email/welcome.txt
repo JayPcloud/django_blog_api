@@ -1,0 +1,7 @@
+Hi {{ user.first_name|default:user.username }},
+
+Welcome to {{ site_name }}! We're glad you signed up.
+
+If you have questions, reply to this email.
+
+— The {{ site_name }} team

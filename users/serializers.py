@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Profile
+from .utils import send_welcome_email
 
 
 class PublicUserSerializer(serializers.ModelSerializer):
@@ -9,6 +10,8 @@ class PublicUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)
     profile = serializers.HyperlinkedRelatedField(read_only=True, view_name='profile-detail', many=False)
     old_password = serializers.CharField(write_only=True, required=False)
+    email = serializers.CharField(required=True)
+    first_name = serializers.CharField(required=True)
     
     
     def validate(self, data):
@@ -47,7 +50,8 @@ class PublicUserSerializer(serializers.ModelSerializer):
         )
         user.set_password(password)
         user.save()
-
+        send_welcome_email(user)
+        
         return user
 
     
@@ -68,7 +72,8 @@ class PublicUserSerializer(serializers.ModelSerializer):
 
     class Meta():
         model=User
-        fields = ['url', 'id', 'username', 'first_name', 'last_name', 'password','old_password','profile']
+        fields = ['url', 'id', 'email', 'username', 'first_name', 'last_name', 'password','old_password','profile',]
+        required_fields = ['email','first_name','last_name',]
 
 
 class PrivateUserSerializer(serializers.ModelSerializer):

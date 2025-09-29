@@ -2,21 +2,22 @@ from django.db import models
 from django.utils.deconstruct import deconstructible
 import os
 from users.models import User
+from cloudinary_storage.storage import MediaCloudinaryStorage
 
 
-@deconstructible
-class GenerateProfileImagePath():
+# @deconstructible
+# class GenerateProfileImagePath():
     
-    def __init__(self):
-        pass
+#     def __init__(self):
+#         pass
 
-    def __call__(self, instance, filename):
-        ext = filename.split('.')[-1]
-        path = f'media/blog/{instance.blog_post.pk}/media_files/'
-        name = f'post.{ext}'
-        return os.path.join(path, name)
+#     def __call__(self, instance, filename):
+#         ext = filename.split('.')[-1]
+#         path = f'media/blog/{instance.blog_post.pk}/media_files/'
+#         name = f'post.{ext}'
+#         return os.path.join(path, name)
     
-blog_post_media_path = GenerateProfileImagePath()
+# blog_post_media_path = GenerateProfileImagePath()
 
 
 
@@ -40,7 +41,9 @@ class BlogPost(models.Model):
 
 class BlogMedia(models.Model):
     blog_post = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='media')
-    file = models.FileField(upload_to=blog_post_media_path)
+    file = models.FileField(
+        storage=MediaCloudinaryStorage(),
+        upload_to='django/blog_api', null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self, *args, **kwargs):
@@ -50,7 +53,7 @@ class BlogMedia(models.Model):
 class Comment(models.Model):
     body = models.TextField()
     blog = models.ForeignKey(BlogPost, on_delete=models.CASCADE, related_name='comments')
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True,)
     author = models.ForeignKey(User, on_delete=models.CASCADE, )
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
 

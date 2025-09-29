@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
             name='BlogMedia',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('file', models.FileField(upload_to=blog.models.GenerateProfileImagePath())),
+                ('file', models.FileField(upload_to='django/blog_api')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('blog_post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='media', to='blog.blogpost')),
             ],

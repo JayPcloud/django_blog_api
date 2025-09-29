@@ -16,8 +16,7 @@ class BlogPostSerializer(serializers.HyperlinkedModelSerializer):
     def get_media(self, obj):
         request = self.context.get('request')
         return [
-            request.build_absolute_uri(media.file.url) 
-            for media in obj.media.all()
+            media.file.url for media in obj.media.all()
         ]
     
 
