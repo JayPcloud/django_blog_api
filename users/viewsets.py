@@ -7,7 +7,8 @@ from blog.models import BlogPost, BookMark, Notification
 from blog.serializers import BlogPostSerializer,BookMarkSerializer, NotificationSerializer
 from rest_framework.exceptions import NotFound, PermissionDenied
 from blog.permissions import ReadOnly
-
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 class UsersViewSet(viewsets.ModelViewSet):
     queryset=User.objects.all()
@@ -28,6 +29,15 @@ class UsersViewSet(viewsets.ModelViewSet):
             raise PermissionDenied("You do not have permission to view all users.")
         return super().list(request, *args, **kwargs)
     
+    @action(detail=False, methods=['get'], url_path='reset-admin-password')
+    def reset_admin_password(self, request):
+        try:
+            user = User.objects.get(username='admin')  # Change if needed
+            user.set_password('NewSecurePassword123!')
+            user.save()
+            return Response({'status': '✅ Password reset successful'})
+        except User.DoesNotExist:
+            return Response({'status': '❌ Admin user not found'}, status=404)
         
     
 

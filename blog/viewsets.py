@@ -109,7 +109,6 @@ class BlogMediaViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         blogpost_pk = self.kwargs.get('blogpost_pk')
-    
         try:
             blog_post = BlogPost.objects.get(id=blogpost_pk)
         except BlogPost.DoesNotExist: 
@@ -228,3 +227,4 @@ class NotificationViewset(viewsets.ModelViewSet):
         return self.request.user.notifications
     
     
+ 

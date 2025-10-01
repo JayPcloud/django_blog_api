@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'cloudinary',
     'cloudinary_storage',
+    'drf_yasg',
     'users',
     'blog',
 ]
